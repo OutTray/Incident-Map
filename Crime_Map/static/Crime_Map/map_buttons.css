@@ -1,0 +1,30 @@
+h1 {
+    color:blue
+}
+
+#button1 {
+    opacity: 0.75;
+    border:none;
+    background-color:Transparent;
+    outline:none;
+
+    position:absolute;
+    top: 0px;
+    left: 0px;
+}
+
+#button2 {
+    opacity: 0.75;
+    border:none;
+    background-color:Transparent;
+    outline:none;
+
+    position:absolute;
+    top: 0px;
+    left: 0px;
+}
+
+#button2:hover {
+    fill:blue;
+}
+

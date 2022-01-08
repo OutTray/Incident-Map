@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Ryerson Crime Map</title>
+    </head>
+    <body>
+        {% block body %}
+        {% endblock %}
+
+        <p> This is in the layout.html file. Created by someone who had better remain anonymous. Github is here: _________</p>
+        <p>Navigation: <a href="{% url 'Crime_Map:index' %}">Main Index Page</a> <a href="{% url 'Crime_Map:raw_data' %}">Raw Data Page</a></p>
+    </body>
+</html>

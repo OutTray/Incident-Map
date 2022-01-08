@@ -1,0 +1,41 @@
+{% extends "Crime_Map/layout.html" %}
+
+{% block body %}
+
+    <h1>This is the Raw Data page</h1>
+    <p>The SQL output will be rendered here</p>
+    
+    <table>
+        <tr>
+            <td>date_uploaded</td>
+            <td>incident_date</td>
+            <td>incident_time</td>
+            <td>reported_date</td>
+            <td>reported_time</td>
+            <td>location</td>
+            <td>incident_type</td>
+            <td>hyperlinks</td>
+            <td>incident_details</td>
+            <td>suspect_descriptions</td>
+        </tr>
+
+        {%for entry in object %}
+
+        <tr>
+            <td>{{entry.date_uploaded}}</td>
+            <td>{{entry.incident_date}}</td>
+            <td>{{entry.incident_time}}</td>
+            <td>{{entry.reported_date}}</td>
+            <td>{{entry.reported_time}}</td>
+            <td>{{entry.location}}</td>
+            <td>{{entry.incident_type}}</td>
+            <td>{{entry.hyperlinks}}</td>
+            <td>{{entry.incident_details}}</td>
+            <td>{{entry.suspect_descriptions}}</td>
+        </tr>>
+
+        {% endfor %}
+
+    </table>   
+
+{% endblock %}

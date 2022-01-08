@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Ryerson Crime Map</title>
+
+        {% load static %} <link rel="stylesheet" href="{% static 'Crime_Map/map_buttons.css' %}">     
+
+        <style>
+
+            .flex-container{
+                display:flex;
+                flex-direction:row;
+            }
+
+            .modal {
+                display: none; /* Hidden by default */
+                position: fixed; /* Stay in place */
+                z-index: 1; /* Sit on top */
+                left: 0;
+                top: 0;
+                width: 100%; /* Full width */
+                height: 100%; /* Full height */
+                overflow: auto; /* Enable scroll if needed */
+                background-color: rgb(0,0,0); /* Fallback color */
+                background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+            }
+
+            
+            /* Modal Content/Box */
+            .modal-content {
+                background-color: #fefefe;
+                margin: 15% auto; /* 15% from the top and centered */
+                padding: 20px;
+                border: 1px solid #888;
+                width: 80%; /* Could be more or less, depending on screen size */
+            }
+            
+            /* The Close Button */
+            .close {
+                color: #aaa;
+                float: right;
+                font-size: 28px;
+                font-weight: bold;
+            }
+            
+            .close:hover,
+            .close:focus {
+                color: black;
+                text-decoration: none;
+                cursor: pointer;
+            }
+
+            .map {
+                position: relative;
+            }
+
+            #button2 {
+                opacity: 1;
+                border:none;
+                background-color:Transparent;
+                outline:none;
+            
+                position:absolute;
+            }
+
+            #circle1.hover{
+                fill:blue;
+            }
+
+        </style>
+
+   
+    </head>
+    <body>
+     
+        <h1>This is the Ryerson Crime Map</h1>
+        <p>The current date is {{ current_date }}</p>
+
+        <div class="flex-container">
+            <div class="map">
+                <div>                
+                    {% load static %} <img src="{% static 'Crime_Map/Ryerson_Map.png' %}" alt="My image">
+                    <!-- IMPLEMENT MODAL BOXES RELATED TO THESE BUTTONS -->
+                    <button id="button1" type="button">
+                        <svg width="20" height="20">
+                            <circle id="circle1" cx="10" cy = "10" r="10" fill="black"></circle>
+                        </svg>
+                    </button>
+                    {% for entry_pixels in object %}
+                        {% if entry_pixels.top_pixels != 0 %}
+                        <button id="button2" type="button" style="top:{{entry_pixels.top_pixels}}px;left:{{entry_pixels.left_pixels}}px">
+                            <svg width="20" height="20">
+                                <circle id="circle1" cx="10" cy = "10" r="10" fill="coral"></circle>
+                                <text id="circle1" x="50%" y="70%" text-anchor="middle">
+                                    {% load index_templates %}
+                                    {% get_number_entries button_information entry_pixels.id %}
+                                </text>
+                                </svg>
+                        </button>
+                        {% endif %}
+                    {% endfor %}
+
+                </div>
+            </div>
+
+            <div>
+                Listings go here<br>
+                Search Bar <br>
+
+                <form method="get">
+                    Start Date <input type="date" name="start_date" value={{start_date_form}}><br>
+                    End Date <input type="date" name="end_date" value={{end_date_form}}>
+                    <input type="submit">
+                </form>
+                To download these results as a csv file, click <a href= "{% url 'Crime_Map:current_csv' %}">Here</a>
+                <div style="overflow:auto; height:750px; width:400px">
+                    {% for entry in object %}
+                        <div style="padding:10px; margin:10px; border:5px; border-style:solid; border-color: black; background-color:aquamarine">
+                            Incident Type: {{entry.incident_type}}<br>
+                            Incident Date: {{entry.incident_date}}<br>
+                            Incident Time: {{entry.incident_time}}<br>
+                            Incident Location: {{entry.location}}<br>
+
+                            <button id="{{entry.id}}bTn">View Details</button>
+
+                            <div id="{{entry.id}}Modal" class="modal">
+                                <div class="modal-content">
+                                    <span id="{{entry.id}}Span" class="close">&times;</span>
+                                    <h2>Incident Details</h2>
+                                    <p>{{entry.incident_details}}</p>
+                                    <h2>Suspect Description(s)</h2>
+                                    <p>{{entry.suspect_descriptions}}</p>
+                                </div>
+                            </div>
+
+                        </div>
+
+                    {% endfor %}
+
+                    <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+                    <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+                    <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+                    <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+                    <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+                    <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+                    Bottom
+                </div>
+            </div>
+
+        </div>
+
+        <p>The last time the website was scraped was ________</p>
+        <p>To go to the raw SQL data, click <a href="{% url 'Crime_Map:raw_data' %}">here</a></p>
+
+
+
+        
+        <p>Navigation: <a href="{% url 'Crime_Map:index' %}">Main Index Page</a> <a href="{% url 'Crime_Map:raw_data' %}">Raw Data Page</a> <a href="{% url 'Crime_Map:data_csv' %}">Test</a></p>
+
+
+        <script type="text/javascript">
+
+            {% for entryjs in object %}
+                var modal{{entryjs.id}} = document.getElementById('{{entryjs.id}}Modal');
+                var btn{{entryjs.id}} = document.getElementById('{{entryjs.id}}bTn');  
+                
+                var span{{entryjs.id}} = document.getElementById('{{entryjs.id}}Span');
+
+                btn{{entryjs.id}}.onclick = function() {
+                    modal{{entryjs.id}}.style.display = "block";
+                    }
+
+                span{{entryjs.id}}.onclick = function() {
+                    modal{{entryjs.id}}.style.display = "none";
+                }
+
+
+            {% endfor %}
+
+            
+            window.onclick = function(event) {
+
+                {% for entryjs2 in object %}
+                    if (event.target == modal{{entryjs2.id}}) {
+                        modal{{entryjs2.id}}.style.display = "none";
+                    }
+                    {% endfor %}
+            }
+            
+
+         </script>
+         
+    </body>
+</html>
